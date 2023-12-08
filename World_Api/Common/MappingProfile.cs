@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using World_Api.DTO.Country;
+using World_Api.DTO.LoginRegistration;
 using World_Api.DTO.States;
 using World_Api.Models;
 
@@ -24,6 +25,10 @@ namespace World_Api.Common
 
             CreateMap<States,UpdateStateDTO>().ReverseMap();
 
+            ///----LoginRegistration
+            CreateMap<LoginRegistration, GetLoginRegDTO>().ReverseMap();
+
+            CreateMap<LoginRegistration, PostLoginRegDTO>().ReverseMap();
         }
     }
 }

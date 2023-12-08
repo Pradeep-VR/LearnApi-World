@@ -48,6 +48,43 @@ namespace World_Api.Migrations
                     b.ToTable("Countries");
                 });
 
+            modelBuilder.Entity("World_Api.Models.LoginRegistration", b =>
+                {
+                    b.Property<int>("userId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userId"));
+
+                    b.Property<bool>("ActiveSts")
+                        .HasMaxLength(10)
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("userName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("userId");
+
+                    b.ToTable("loginRegistrations");
+                });
+
             modelBuilder.Entity("World_Api.Models.States", b =>
                 {
                     b.Property<int>("Id")
