@@ -34,6 +34,7 @@ builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericReposi
 
 builder.Services.AddTransient<ICountryRepository, CountryRepository>();
 builder.Services.AddTransient<IStateRepository, StateRepository>();
+builder.Services.AddTransient<ILoginRegRepository, LoginRegRepository>();
 #endregion
 
 #region configure serilog

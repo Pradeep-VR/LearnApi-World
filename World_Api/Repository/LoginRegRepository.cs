@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
 using World_Api.Data;
 using World_Api.Models;
 using World_Api.Repository.IRepository;
@@ -14,11 +14,23 @@ namespace World_Api.Repository
             _dbContext = dbContext;
         }
 
-        public Task GetByUserName(string userName)
+        public async Task<List<LoginRegistration>> GetActiveUser(bool sts)
         {
-            throw new NotImplementedException();
+            List<LoginRegistration> logReg = await _dbContext.loginRegistrations.Where(lr => lr.ActiveSts == sts).ToListAsync();
+            return logReg;
         }
 
-        
+        public async Task<LoginRegistration> GetByUserName(string name)
+        {
+            LoginRegistration logReg = await _dbContext.loginRegistrations.FirstOrDefaultAsync(lr => lr.userName ==  name);
+            return logReg;
+        }
+
+        public async Task update(LoginRegistration entity)
+        {
+            _dbContext.loginRegistrations.Update(entity);
+            await _dbContext.SaveChangesAsync();
+
+        }
     }
 }

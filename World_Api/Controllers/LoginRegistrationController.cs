@@ -43,21 +43,45 @@ namespace World_Api.Controllers
         }
 
 
-        /*[HttpGet("{id:int}")]
+        [HttpGet("sts:bool")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult<IEnumerable<GetLoginRegDTO>>> GetActiveUser(bool sts)
+        {
+            var logres = await _iloginregRepository.GetActiveUser(sts);
+            if(logres == null)
+            {
+                _logger.LogError("Error While Get Active Users");
+                return NoContent();
+            }
+            if(logres.Count == 0)
+            {
+                _logger.LogError("There is Zero Active Users");
+                return NoContent();
+            }
+
+            var LogResDto = _mapper.Map<List<GetLoginRegDTO>>(logres);
+            return Ok(LogResDto);
+        }
+
+
+
+        [HttpGet("{UserName}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
         public async Task<ActionResult<GetLoginRegDTO>> GetByuserName(string UserName)
         {
-            var cntry = await _iloginregRepository.GetById(UserName);
+            var LogRes = await _iloginregRepository.GetByUserName(UserName);
 
-            if (cntry == null)
+            if (LogRes == null)
             {
-                _logger.LogError($"Error While try to Get a record id : {id}");
+                _logger.LogError($"Error While try to Get a User : {UserName}");
                 return NoContent();
             }
-            var cntryDTO = _mapper.Map<GetCountryDTO>(cntry);
-            return Ok(cntryDTO);
+            var LogResDTO = _mapper.Map<GetLoginRegDTO>(LogRes);
+            return Ok(LogResDTO);
         }
 
 
@@ -78,7 +102,54 @@ namespace World_Api.Controllers
 
             await _iloginregRepository.Create(user);
             await _iloginregRepository.Save();
-            return CreatedAtAction("GetByuserName",new {userName = user.userName},user);
-        }*/
+            return CreatedAtAction("GetByuserName",new {UserName = user.userName},user);
+        }
+
+        [HttpDelete("{UserName}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult> DeleteById(string UserName)
+        {
+            if (UserName == ""||UserName == null)
+            {
+                return BadRequest();
+            }
+
+            var res = await _iloginregRepository.GetByUserName(UserName);
+            if(res == null)
+            {
+                return NotFound();
+            }
+
+            await _iloginregRepository.Delete(res);
+            return NoContent();
+        }
+
+        [HttpPut("{UserName}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+
+        public async Task<ActionResult<LoginRegistration>> Update(string UserName, [FromBody] UpdateLogRegDTO logregDto)
+        {
+            if (logregDto == null)
+            {
+                return BadRequest();
+            }
+
+            bool res = _iloginregRepository.IsRecordExists(x => x.userName == UserName);
+
+            if(res == false)
+            {
+                return NotFound();
+            }
+
+            var logReg = _mapper.Map<LoginRegistration>(logregDto);
+
+            await _iloginregRepository.update(logReg);
+            return NoContent();
+        }
     }
 }

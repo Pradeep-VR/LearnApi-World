@@ -99,17 +99,6 @@ namespace World_Api.Controllers
             {
                 return BadRequest();
             }
-
-            //var cntryFrmDb = _dbContext.Countries.Find(id);
-
-            //if(cntryFrmDb == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //cntryFrmDb.Name = country.Name;
-            //cntryFrmDb.ShortName = country.ShortName;
-            //cntryFrmDb.CountryCode = country.CountryCode;
             
             var cntry = _mapper.Map<Country>(countryDto);
 

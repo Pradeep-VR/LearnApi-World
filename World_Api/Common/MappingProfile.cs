@@ -29,6 +29,8 @@ namespace World_Api.Common
             CreateMap<LoginRegistration, GetLoginRegDTO>().ReverseMap();
 
             CreateMap<LoginRegistration, PostLoginRegDTO>().ReverseMap();
+
+            CreateMap<LoginRegistration, UpdateLogRegDTO>().ReverseMap();
         }
     }
 }
